@@ -29,4 +29,8 @@ public class IOObjectString: IOObject {
         }
         return super.perform(selector, args: args)
     }
+    
+    public static func == (lhs: IOObjectString, rhs: IOObjectString) -> Bool {
+            return lhs.value == rhs.value
+        }
 }

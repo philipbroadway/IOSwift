@@ -1,54 +1,56 @@
+//
+//  IOSwiftTests.swift
+//  IOSwift
+//
+//  Created by philipbroadway on 6/19/25.
+//
+
 import Testing
 @testable import IOSwift
 
-final class LexerTests {
-    @Test func testSingleSymbols() throws {
-        var lexer = Lexer("()+-[],.")
-        let expected: [Token] = [
-            .leftParen, .rightParen,
-            .symbol("+"), .symbol("-"), .leftBracket, .rightBracket,
-            .comma, .dot,
-            .eof
-        ]
-        for expectedToken in expected {
-            let token = lexer.nextToken()
-            #expect(token == expectedToken, "Expected \(expectedToken), got \(token)")
+@MainActor
+final class IOSwiftTests {
+    @Test func testEvaluateNumber() throws {
+        let io = IO()
+        let exprs: [Expr] = [.number(7)]
+        let result = io.evaluate(exprs)
+        guard let obj = result else {
+            #expect(false, "Expected non-nil result for number evaluation")
+            return
         }
+        guard let num = obj.slots["value"] as? IOObjectNumber else {
+            #expect(false, "Expected slot \"value\" to be IOObjectNumber")
+            return
+        }
+        #expect(num == IOObjectNumber(7), "Expected value 7, got \(num.value)")
     }
 
-    @Test func testIdentifiersAndNumbers() throws {
-        var lexer = Lexer("foo bar123 42 -3.14 baz")
-        #expect(lexer.nextToken() == .identifier("foo"), "Expected identifier(foo)")
-        #expect(lexer.nextToken() == .identifier("bar123"), "Expected identifier(bar123)")
-        #expect(lexer.nextToken() == .number(42), "Expected number(42)")
-        #expect(lexer.nextToken() == .number(-3.14), "Expected number(-3.14)")
-        #expect(lexer.nextToken() == .identifier("baz"), "Expected identifier(baz)")
-        #expect(lexer.nextToken() == .eof, "Expected eof")
+    @Test func testEvaluateString() throws {
+        let io = IO()
+        let exprs: [Expr] = [.string("test")]  
+        let result = io.evaluate(exprs)
+        guard let obj = result else {
+            #expect(false, "Expected non-nil result for string evaluation")
+            return
+        }
+        guard let str = obj.slots["value"] as? IOObjectString else {
+            #expect(false, "Expected slot \"value\" to be IOObjectString")
+            return
+        }
+        #expect(str == IOObjectString("test"), "Expected \"test\", got \(str.value)")
     }
 
-    @Test func testStringLiteral() throws {
-        var lexer = Lexer("\"hello world\"")
-        #expect(lexer.nextToken() == .string("hello world"), "Expected string(hello world)")
-        #expect(lexer.nextToken() == .eof, "Expected eof after string")
-    }
-
-    @Test func testMixedInput() throws {
-        var lexer = Lexer("""
-sum := (a + b) // comment
-  "test"
-""")
-        #expect(lexer.nextToken() == .identifier("sum"), "Expected identifier(sum)")
-        #expect(lexer.nextToken() == .symbol(":="), "Expected symbol(:=)")
-        #expect(lexer.nextToken() == .leftParen, "Expected leftParen")
-        #expect(lexer.nextToken() == .identifier("a"), "Expected identifier(a)")
-        #expect(lexer.nextToken() == .symbol("+"), "Expected symbol(+)")
-        #expect(lexer.nextToken() == .identifier("b"), "Expected identifier(b)")
-        #expect(lexer.nextToken() == .rightParen, "Expected rightParen")
-        #expect(lexer.nextToken() == .symbol("/"), "Expected symbol(/)")
-        #expect(lexer.nextToken() == .symbol("/"), "Expected symbol(/)")
-        #expect(lexer.nextToken() == .identifier("comment"), "Expected identifier(comment)")
-        #expect(lexer.nextToken() == .string("test"), "Expected string(test)")
-        #expect(lexer.nextToken() == .eof, "Expected eof at end")
+    @Test func testEvaluateIdentifier() throws {
+        let io = IO()
+        // Should retrieve the global Object prototype
+        let exprs: [Expr] = [.identifier("Object")]
+        let result = io.evaluate(exprs)
+        guard let obj = result else {
+            #expect(false, "Expected non-nil result for identifier evaluation")
+            return
+        }
+        // The Object prototype is stored in globals under "Object"
+        let expected = IOObject()
+        #expect(type(of: obj) == type(of: expected), "Expected an IOObject instance for global prototype")
     }
 }
-

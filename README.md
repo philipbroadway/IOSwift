@@ -2,6 +2,7 @@
 
 > [IO](https://iolanguage.org) Interpreter in Swift
 
+```text
 ├── Package.swift
 ├── Sources/
 │   └── IoSwift/
@@ -21,3 +22,4 @@
 └── Tests/
     └── IoSwiftTests/
         └── IoSwiftTests.swift // Unit tests for each component
+```

@@ -35,11 +35,11 @@ public class IO {
         switch expr {
         case .number(let n):
             let obj = IOObject()
-            obj.slots["value"] = IOObjectNumber(n)
+            obj.slots["value"] = IONumber(n)
             return obj
         case .string(let s):
             let obj = IOObject()
-            obj.slots["value"] = IOObjectString(s)
+            obj.slots["value"] = IOString(s)
             return obj
         case .identifier(let name):
             return globals[name]

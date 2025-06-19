@@ -1,5 +1,5 @@
 //
-//  IOObjectString.swift
+//  IOString.swift
 //  IOSwift
 //
 //  Created by philipbroadway on 6/19/25.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// String IO object
-public class IOObjectString: IOObject {
+public class IOString: IOObject {
     public let value: String
 
     public init(_ value: String) {
@@ -21,8 +21,8 @@ public class IOObjectString: IOObject {
     public override func perform(_ selector: String, args: [IOObject] = []) -> IOObject {
         switch selector {
         case "+":
-            if let other = args.first as? IOObjectString {
-                return IOObjectString(value + other.value)
+            if let other = args.first as? IOString {
+                return IOString(value + other.value)
             }
         default:
             break
@@ -30,7 +30,7 @@ public class IOObjectString: IOObject {
         return super.perform(selector, args: args)
     }
     
-    public static func == (lhs: IOObjectString, rhs: IOObjectString) -> Bool {
+    public static func == (lhs: IOString, rhs: IOString) -> Bool {
             return lhs.value == rhs.value
         }
 }

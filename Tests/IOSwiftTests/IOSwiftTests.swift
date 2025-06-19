@@ -18,11 +18,11 @@ final class IOSwiftTests {
             #expect(false, "Expected non-nil result for number evaluation")
             return
         }
-        guard let num = obj.slots["value"] as? IOObjectNumber else {
-            #expect(false, "Expected slot \"value\" to be IOObjectNumber")
+        guard let num = obj.slots["value"] as? IONumber else {
+            #expect(false, "Expected slot \"value\" to be IONumber")
             return
         }
-        #expect(num == IOObjectNumber(7), "Expected value 7, got \(num.value)")
+        #expect(num == IONumber(7), "Expected value 7, got \(num.value)")
     }
 
     @Test func testEvaluateString() throws {
@@ -33,11 +33,11 @@ final class IOSwiftTests {
             #expect(false, "Expected non-nil result for string evaluation")
             return
         }
-        guard let str = obj.slots["value"] as? IOObjectString else {
-            #expect(false, "Expected slot \"value\" to be IOObjectString")
+        guard let str = obj.slots["value"] as? IOString else {
+            #expect(false, "Expected slot \"value\" to be IOString")
             return
         }
-        #expect(str == IOObjectString("test"), "Expected \"test\", got \(str.value)")
+        #expect(str == IOString("test"), "Expected \"test\", got \(str.value)")
     }
 
     @Test func testEvaluateIdentifier() throws {

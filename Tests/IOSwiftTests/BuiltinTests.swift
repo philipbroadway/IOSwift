@@ -10,26 +10,26 @@ import Testing
 
 final class BuiltinTests {
     @Test func testNumberAddition() throws {
-        let a = IOObjectNumber(2)
-        let b = IOObjectNumber(3)
+        let a = IONumber(2)
+        let b = IONumber(3)
         let result = a.perform("+", args: [b])
         // Unwrap the result and compare values directly
-        guard let sum = result as? IOObjectNumber else {
-            #expect(false, "Result is not IOObjectNumber")
+        guard let sum = result as? IONumber else {
+            #expect(false, "Result is not IONumber")
             return
         }
-        #expect(sum == IOObjectNumber(5), "2 + 3 should be 5, got \(sum.value)")
+        #expect(sum == IONumber(5), "2 + 3 should be 5, got \(sum.value)")
     }
 
     @Test func testStringConcatenation() throws {
-        let a = IOObjectString("foo")
-        let b = IOObjectString("bar")
+        let a = IOString("foo")
+        let b = IOString("bar")
         let result = a.perform("+", args: [b])
         // Unwrap the result and compare values directly
-        guard let concat = result as? IOObjectString else {
-            #expect(false, "Result is not IOObjectString")
+        guard let concat = result as? IOString else {
+            #expect(false, "Result is not IOString")
             return
         }
-        #expect(concat == IOObjectString("foobar"), "foo + bar should be foobar, got \(concat.value)")
+        #expect(concat == IOString("foobar"), "foo + bar should be foobar, got \(concat.value)")
     }
 }
